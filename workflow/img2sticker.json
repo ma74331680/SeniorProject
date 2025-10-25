@@ -1,0 +1,804 @@
+{
+  "10": {
+    "inputs": {
+      "image": "{{FACE_IMAGE}}"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "載入圖片"
+    }
+  },
+  "14": {
+    "inputs": {
+      "ckpt_name": "samaritan3dCartoon_v40SDXL.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "載入檢查點"
+    }
+  },
+  "20": {
+    "inputs": {
+      "weight": 1,
+      "weight_type": "linear",
+      "combine_embeds": "concat",
+      "start_at": 0,
+      "end_at": 1,
+      "embeds_scaling": "K+V",
+      "model": [
+        "14",
+        0
+      ],
+      "ipadapter": [
+        "21",
+        0
+      ],
+      "image": [
+        "10",
+        0
+      ],
+      "clip_vision": [
+        "22",
+        0
+      ]
+    },
+    "class_type": "IPAdapterAdvanced",
+    "_meta": {
+      "title": "IPAdapter Advanced"
+    }
+  },
+  "21": {
+    "inputs": {
+      "ipadapter_file": "ip-adapter-plus-face_sdxl_vit-h.safetensors"
+    },
+    "class_type": "IPAdapterModelLoader",
+    "_meta": {
+      "title": "IPAdapter Model Loader"
+    }
+  },
+  "22": {
+    "inputs": {
+      "clip_name": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "載入 CLIP Vision"
+    }
+  },
+  "23": {
+    "inputs": {
+      "side_length": 1024,
+      "side": "Longest",
+      "upscale_method": "nearest-exact",
+      "crop": "disabled",
+      "image": [
+        "24",
+        0
+      ]
+    },
+    "class_type": "DF_Image_scale_to_side",
+    "_meta": {
+      "title": "Image scale to side"
+    }
+  },
+  "24": {
+    "inputs": {
+      "image": "{{POSE_IMAGE}}"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "載入圖片"
+    }
+  },
+  "25": {
+    "inputs": {
+      "image": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "GetImageSize",
+    "_meta": {
+      "title": "Get Image Size"
+    }
+  },
+  "26": {
+    "inputs": {
+      "detect_hand": "enable",
+      "detect_body": "enable",
+      "detect_face": "enable",
+      "resolution": 512,
+      "bbox_detector": "yolox_l.onnx",
+      "pose_estimator": "dw-ll_ucoco_384.onnx",
+      "scale_stick_for_xinsr_cn": "disable",
+      "image": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "DWPreprocessor",
+    "_meta": {
+      "title": "DWPose Estimator"
+    }
+  },
+  "27": {
+    "inputs": {
+      "image_gen_width": 512,
+      "image_gen_height": 512,
+      "resize_mode": "Just Resize",
+      "original_image": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "PixelPerfectResolution",
+    "_meta": {
+      "title": "Pixel Perfect Resolution"
+    }
+  },
+  "28": {
+    "inputs": {
+      "images": [
+        "26",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "預覽圖片"
+    }
+  },
+  "29": {
+    "inputs": {
+      "control_net_name": "controlnetxlCNXL_2vxpswa7AnytestV4.safetensors"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "載入 ControlNet 模型"
+    }
+  },
+  "31": {
+    "inputs": {
+      "strength": 1,
+      "start_percent": 0,
+      "end_percent": 1,
+      "positive": [
+        "67",
+        0
+      ],
+      "negative": [
+        "68",
+        0
+      ],
+      "control_net": [
+        "29",
+        0
+      ],
+      "image": [
+        "26",
+        0
+      ],
+      "vae": [
+        "14",
+        2
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "套用 ControlNet"
+    }
+  },
+  "32": {
+    "inputs": {
+      "control_net_name": "controlnetxlCNXL_2vxpswa7AnytestV4.safetensors"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "載入 ControlNet 模型"
+    }
+  },
+  "33": {
+    "inputs": {
+      "preprocessor": "CannyEdgePreprocessor",
+      "resolution": [
+        "27",
+        0
+      ],
+      "image": [
+        "23",
+        0
+      ]
+    },
+    "class_type": "AIO_Preprocessor",
+    "_meta": {
+      "title": "AIO Aux Preprocessor"
+    }
+  },
+  "34": {
+    "inputs": {
+      "strength": 0.8,
+      "start_percent": 0,
+      "end_percent": 0.4,
+      "positive": [
+        "31",
+        0
+      ],
+      "negative": [
+        "31",
+        1
+      ],
+      "control_net": [
+        "32",
+        0
+      ],
+      "image": [
+        "33",
+        0
+      ],
+      "vae": [
+        "14",
+        2
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "套用 ControlNet"
+    }
+  },
+  "35": {
+    "inputs": {
+      "images": [
+        "33",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "預覽圖片"
+    }
+  },
+  "36": {
+    "inputs": {
+      "width": [
+        "25",
+        0
+      ],
+      "height": [
+        "25",
+        1
+      ],
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "空白潛在影像"
+    }
+  },
+  "38": {
+    "inputs": {
+      "seed": 959895648208300,
+      "steps": 30,
+      "cfg": 7,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "karras",
+      "denoise": 1,
+      "preview_method": "auto",
+      "vae_decode": "true",
+      "model": [
+        "20",
+        0
+      ],
+      "positive": [
+        "34",
+        0
+      ],
+      "negative": [
+        "34",
+        1
+      ],
+      "latent_image": [
+        "36",
+        0
+      ],
+      "optional_vae": [
+        "14",
+        2
+      ]
+    },
+    "class_type": "KSampler (Efficient)",
+    "_meta": {
+      "title": "KSampler (Efficient)"
+    }
+  },
+  "39": {
+    "inputs": {
+      "images": [
+        "38",
+        5
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "預覽圖片"
+    }
+  },
+  "40": {
+    "inputs": {
+      "model_name": "sam_vit_b (375MB)"
+    },
+    "class_type": "SAMModelLoader (segment anything)",
+    "_meta": {
+      "title": "SAMModelLoader (segment anything)"
+    }
+  },
+  "41": {
+    "inputs": {
+      "model_name": "GroundingDINO_SwinB (938MB)"
+    },
+    "class_type": "GroundingDinoModelLoader (segment anything)",
+    "_meta": {
+      "title": "GroundingDinoModelLoader (segment anything)"
+    }
+  },
+  "42": {
+    "inputs": {
+      "prompt": [
+        "45",
+        0
+      ],
+      "threshold": 0.2,
+      "sam_model": [
+        "40",
+        0
+      ],
+      "grounding_dino_model": [
+        "41",
+        0
+      ],
+      "image": [
+        "38",
+        5
+      ]
+    },
+    "class_type": "GroundingDinoSAMSegment (segment anything)",
+    "_meta": {
+      "title": "GroundingDinoSAMSegment (segment anything)"
+    }
+  },
+  "45": {
+    "inputs": {
+      "text": "cartoon characeter"
+    },
+    "class_type": "Text _O",
+    "_meta": {
+      "title": "Text _O"
+    }
+  },
+  "46": {
+    "inputs": {
+      "image": [
+        "42",
+        0
+      ],
+      "alpha": [
+        "48",
+        0
+      ]
+    },
+    "class_type": "JoinImageWithAlpha",
+    "_meta": {
+      "title": "合併影像與 Alpha"
+    }
+  },
+  "47": {
+    "inputs": {
+      "images": [
+        "46",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "預覽圖片"
+    }
+  },
+  "48": {
+    "inputs": {
+      "masks": [
+        "42",
+        1
+      ]
+    },
+    "class_type": "Mask Invert",
+    "_meta": {
+      "title": "Mask Invert"
+    }
+  },
+  "49": {
+    "inputs": {
+      "panel_width": [
+        "25",
+        0
+      ],
+      "panel_height": [
+        "25",
+        1
+      ],
+      "fill_color": "blue",
+      "fill_color_hex": "#0066cc"
+    },
+    "class_type": "CR Color Panel",
+    "_meta": {
+      "title": "🌁 CR Color Panel"
+    }
+  },
+  "50": {
+    "inputs": {
+      "images": [
+        "49",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "預覽圖片"
+    }
+  },
+  "51": {
+    "inputs": {
+      "image": [
+        "46",
+        0
+      ]
+    },
+    "class_type": "SplitImageWithAlpha",
+    "_meta": {
+      "title": "以 Alpha 通道分割影像"
+    }
+  },
+  "52": {
+    "inputs": {
+      "overlay_resize": "Resize by rescale_factor",
+      "resize_method": "bilinear",
+      "rescale_factor": 1,
+      "width": 1792,
+      "height": 1024,
+      "x_offset": 0,
+      "y_offset": 0,
+      "rotation": 0,
+      "opacity": 0,
+      "base_image": [
+        "49",
+        0
+      ],
+      "overlay_image": [
+        "51",
+        0
+      ],
+      "optional_mask": [
+        "51",
+        1
+      ]
+    },
+    "class_type": "Image Overlay",
+    "_meta": {
+      "title": "Image Overlay"
+    }
+  },
+  "53": {
+    "inputs": {
+      "images": [
+        "52",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "預覽圖片"
+    }
+  },
+  "54": {
+    "inputs": {
+      "pixels": [
+        "52",
+        0
+      ],
+      "vae": [
+        "14",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE 編碼"
+    }
+  },
+  "55": {
+    "inputs": {
+      "upscale_method": "nearest-exact",
+      "scale_by": 1.5,
+      "samples": [
+        "54",
+        0
+      ]
+    },
+    "class_type": "LatentUpscaleBy",
+    "_meta": {
+      "title": "放大 latent 空間"
+    }
+  },
+  "56": {
+    "inputs": {
+      "seed": 1064352471734354,
+      "steps": 30,
+      "cfg": 7,
+      "sampler_name": "dpmpp_2m_sde_gpu",
+      "scheduler": "karras",
+      "denoise": 0.7,
+      "preview_method": "auto",
+      "vae_decode": "true",
+      "model": [
+        "38",
+        0
+      ],
+      "positive": [
+        "38",
+        1
+      ],
+      "negative": [
+        "38",
+        2
+      ],
+      "latent_image": [
+        "55",
+        0
+      ],
+      "optional_vae": [
+        "14",
+        2
+      ]
+    },
+    "class_type": "KSampler (Efficient)",
+    "_meta": {
+      "title": "KSampler (Efficient)"
+    }
+  },
+  "57": {
+    "inputs": {
+      "images": [
+        "56",
+        5
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "預覽圖片"
+    }
+  },
+  "58": {
+    "inputs": {
+      "model_name": "sam_vit_b_01ec64.pth",
+      "device_mode": "Prefer GPU"
+    },
+    "class_type": "SAMLoader",
+    "_meta": {
+      "title": "SAMLoader (Impact)"
+    }
+  },
+  "59": {
+    "inputs": {
+      "guide_size": 256,
+      "guide_size_for": true,
+      "max_size": 768,
+      "seed": 354694266596042,
+      "steps": 20,
+      "cfg": 6,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 0.5,
+      "feather": 5,
+      "noise_mask": true,
+      "force_inpaint": true,
+      "bbox_threshold": 0.5,
+      "bbox_dilation": 10,
+      "bbox_crop_factor": 3,
+      "sam_detection_hint": "center-1",
+      "sam_dilation": 0,
+      "sam_threshold": 0.93,
+      "sam_bbox_expansion": 0,
+      "sam_mask_hint_threshold": 0.7,
+      "sam_mask_hint_use_negative": "False",
+      "drop_size": 10,
+      "wildcard": "",
+      "cycle": 2,
+      "inpaint_model": false,
+      "noise_mask_feather": 20,
+      "tiled_encode": false,
+      "tiled_decode": false,
+      "image": [
+        "56",
+        5
+      ],
+      "model": [
+        "56",
+        0
+      ],
+      "clip": [
+        "14",
+        1
+      ],
+      "vae": [
+        "14",
+        2
+      ],
+      "positive": [
+        "56",
+        1
+      ],
+      "negative": [
+        "56",
+        2
+      ],
+      "bbox_detector": [
+        "60",
+        0
+      ],
+      "sam_model_opt": [
+        "58",
+        0
+      ],
+      "segm_detector_opt": [
+        "60",
+        1
+      ]
+    },
+    "class_type": "FaceDetailer",
+    "_meta": {
+      "title": "FaceDetailer"
+    }
+  },
+  "60": {
+    "inputs": {
+      "model_name": "bbox/face_yolov8m.pt"
+    },
+    "class_type": "UltralyticsDetectorProvider",
+    "_meta": {
+      "title": "UltralyticsDetectorProvider"
+    }
+  },
+  "61": {
+    "inputs": {
+      "images": [
+        "59",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "預覽圖片"
+    }
+  },
+  "62": {
+    "inputs": {
+      "text": "3D cinematic film, highly detailed, a girl, black hair, wearing a black skirt, {looking at the viewer: 1.3}"
+    },
+    "class_type": "Text _O",
+    "_meta": {
+      "title": "Positive"
+    }
+  },
+  "63": {
+    "inputs": {
+      "text": "blurry, watermark"
+    },
+    "class_type": "Text _O",
+    "_meta": {
+      "title": "Negative"
+    }
+  },
+  "64": {
+    "inputs": {
+      "text_positive": [
+        "62",
+        0
+      ],
+      "text_negative": [
+        "63",
+        0
+      ],
+      "style": "sai-enhance",
+      "log_prompt": true,
+      "style_positive": false,
+      "style_negative": false
+    },
+    "class_type": "SDXLPromptStyler",
+    "_meta": {
+      "title": "SDXL Prompt Styler"
+    }
+  },
+  "65": {
+    "inputs": {
+      "text_positive": [
+        "66",
+        0
+      ],
+      "text_negative": [
+        "66",
+        1
+      ],
+      "style": "sai-3d-model",
+      "log_prompt": true,
+      "style_positive": false,
+      "style_negative": false
+    },
+    "class_type": "SDXLPromptStyler",
+    "_meta": {
+      "title": "SDXL Prompt Styler"
+    }
+  },
+  "66": {
+    "inputs": {
+      "text_positive": [
+        "64",
+        0
+      ],
+      "text_negative": [
+        "64",
+        1
+      ],
+      "style": "sai-anime",
+      "log_prompt": true,
+      "style_positive": false,
+      "style_negative": false
+    },
+    "class_type": "SDXLPromptStyler",
+    "_meta": {
+      "title": "SDXL Prompt Styler"
+    }
+  },
+  "67": {
+    "inputs": {
+      "text": [
+        "65",
+        0
+      ],
+      "clip": [
+        "14",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP 文字編碼（提示詞）"
+    }
+  },
+  "68": {
+    "inputs": {
+      "text": [
+        "65",
+        1
+      ],
+      "clip": [
+        "14",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP 文字編碼（提示詞）"
+    }
+  },
+  "70": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "59",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "儲存圖片"
+    }
+  }
+}
