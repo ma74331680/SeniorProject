@@ -1,0 +1,18 @@
+# Python 編譯暫存
+__pycache__/
+*.pyc
+
+# 虛擬環境
+.venv/
+env/
+
+# 暫存資料
+data/uploads/
+data/tmp/
+
+# Log 檔案
+*.log
+
+# 系統自動產生
+.DS_Store
+Thumbs.db
