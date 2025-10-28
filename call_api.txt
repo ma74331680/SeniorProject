@@ -1,5 +1,4 @@
 # 呼叫API指令(PowerShell)
-curl.exe -X POST "http://<HOST_IP>>:9000/api/jobs" `
+curl.exe -X POST "http://<HOST_IP>:9000/api/jobs" `
   -F "face=@<FILE_PATH>;type=image/<jpg_or_png>" `
   -F "pose=@<FILE_PATH>;type=image/<jpg_or_png>"
-
