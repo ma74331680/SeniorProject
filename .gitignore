@@ -8,8 +8,6 @@ env/
 
 # 暫存資料
 data/
-data/uploads/
-data/tmp/
 
 # Log 檔案
 *.log
