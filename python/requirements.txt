@@ -1,11 +1,7 @@
-# --- Core Web Framework ---
+# --- Base dependencies ---
 fastapi>=0.115.0
 uvicorn[standard]>=0.30.0
-
-# --- Async Networking / File IO ---
 httpx>=0.27.0
 websockets>=12.0
 aiofiles>=23.2.1
-
-# --- For File Uploads (multipart/form-data) ---
 python-multipart>=0.0.9
